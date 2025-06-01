@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة ويب جميلة</title>
+    <title>Discord Clone - نظام الشات</title>
     <style>
         * {
             margin: 0;
@@ -13,150 +13,923 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #36393f;
+            color: #dcddde;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* الشريط الجانبي للخوادم */
+        .servers-sidebar {
+            width: 72px;
+            background: #202225;
+            padding: 12px 0;
+            overflow-y: auto;
+            border-left: 1px solid #1e2124;
+        }
+
+        .server-icon {
+            width: 48px;
+            height: 48px;
+            background: #5865f2;
+            border-radius: 50%;
+            margin: 8px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            text-align: center;
-            max-width: 500px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        h1 {
-            color: white;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            font-weight: bold;
+            font-size: 18px;
+            position: relative;
         }
 
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        .server-icon:hover {
+            border-radius: 16px;
+            background: #5865f2;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .server-icon.active {
+            border-radius: 16px;
         }
 
-        .decorative-circles {
+        .server-icon.add-server {
+            background: #36393f;
+            color: #3ba55c;
+            font-size: 24px;
+        }
+
+        .server-icon.add-server:hover {
+            background: #3ba55c;
+            color: white;
+        }
+
+        /* الشريط الجانبي للقنوات */
+        .channels-sidebar {
+            width: 240px;
+            background: #2f3136;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .server-header {
+            height: 48px;
+            padding: 0 16px;
+            border-bottom: 1px solid #202225;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            background: #2f3136;
+        }
+
+        .server-header:hover {
+            background: #34373c;
+        }
+
+        .server-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .dropdown-icon {
+            font-size: 12px;
+        }
+
+        .channels-list {
+            flex: 1;
+            padding: 16px 8px;
+            overflow-y: auto;
+        }
+
+        .channel-category {
+            color: #8e9297;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 16px 8px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .channel-category:hover {
+            color: #dcddde;
+        }
+
+        .channel-item {
+            padding: 1px 8px;
+            margin: 1px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            height: 32px;
+            color: #8e9297;
+        }
+
+        .channel-item:hover {
+            background: #3c3f44;
+            color: #dcddde;
+        }
+
+        .channel-item.active {
+            background: #404249;
+            color: #ffffff;
+        }
+
+        .channel-icon {
+            margin-left: 6px;
+            font-size: 16px;
+        }
+
+        .channel-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .add-channel {
+            color: #b9bbbe;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-channel:hover {
+            color: #dcddde;
+        }
+
+        /* منطقة الشات الرئيسية */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            height: 48px;
+            background: #36393f;
+            border-bottom: 1px solid #202225;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: relative;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .channel-hash {
+            color: #8e9297;
+            margin-left: 8px;
+            font-size: 20px;
+        }
+
+        .current-channel {
+            font-weight: 600;
+            color: #ffffff;
+            margin-left: 8px;
+        }
+
+        .channel-topic {
+            color: #72767d;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .chat-controls {
             position: absolute;
+            left: 16px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .chat-control {
+            background: none;
+            border: none;
+            color: #b9bbbe;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+        }
+
+        .chat-control:hover {
+            color: #dcddde;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #36393f;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 16px;
+            padding: 2px 16px;
+            border-radius: 4px;
+        }
+
+        .message:hover {
+            background: #32353b;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #5865f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-left: 16px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .message-author {
+            font-weight: 600;
+            color: #ffffff;
+            margin-left: 8px;
+        }
+
+        .message-timestamp {
+            color: #72767d;
+            font-size: 12px;
+        }
+
+        .message-text {
+            line-height: 1.375;
+            color: #dcddde;
+        }
+
+        .message-input-container {
+            padding: 16px;
+            background: #36393f;
+        }
+
+        .message-input-wrapper {
+            background: #40444b;
+            border-radius: 8px;
+            padding: 11px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #dcddde;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .message-input::placeholder {
+            color: #72767d;
+        }
+
+        .send-button {
+            background: #5865f2;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .send-button:hover {
+            background: #4752c4;
+        }
+
+        .send-button:disabled {
+            background: #4f545c;
+            cursor: not-allowed;
+        }
+
+        /* قوائم منبثقة */
+        .modal-overlay {
+            position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #36393f;
+            border-radius: 8px;
+            padding: 24px;
+            width: 400px;
+            max-width: 90vw;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #b9bbbe;
+            font-size: 14px;
+        }
+
+        .form-input {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
+            padding: 10px 12px;
+            background: #202225;
+            border: 1px solid #40444b;
+            border-radius: 4px;
+            color: #dcddde;
+            font-size: 16px;
         }
 
-        .circle {
-            position: absolute;
+        .form-input:focus {
+            outline: none;
+            border-color: #5865f2;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #5865f2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4752c4;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #dcddde;
+            border: 1px solid #40444b;
+        }
+
+        .btn-secondary:hover {
+            background: #40444b;
+        }
+
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2f3136;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #202225;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #40444b;
+        }
+
+        /* المستخدمين المتصلين */
+        .members-sidebar {
+            width: 240px;
+            background: #2f3136;
+            border-right: 1px solid #202225;
+            padding: 16px 8px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .members-list {
+            margin-top: 16px;
+        }
+
+        .member-category {
+            color: #8e9297;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding: 0 8px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .member-item:hover {
+            background: #3c3f44;
+        }
+
+        .member-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 6s ease-in-out infinite;
+            background: #5865f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-left: 12px;
+            font-size: 14px;
         }
 
-        .circle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
+        .member-name {
+            color: #b9bbbe;
+            font-size: 14px;
         }
 
-        .circle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: #3ba55c;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -2px;
+            left: -2px;
+            border: 2px solid #2f3136;
         }
 
-        .circle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
+        @media (max-width: 768px) {
+            .servers-sidebar {
+                width: 60px;
             }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
+            
+            .channels-sidebar {
+                width: 200px;
+            }
+            
+            .members-sidebar {
+                display: none !important;
             }
         }
     </style>
 </head>
 <body>
-    <div class="decorative-circles">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
+    <div class="app">
+        <!-- الشريط الجانبي للخوادم -->
+        <div class="servers-sidebar">
+            <div class="server-icon active" data-server="main">M</div>
+            <div class="server-icon" data-server="gaming">G</div>
+            <div class="server-icon" data-server="work">W</div>
+            <div class="server-icon add-server" onclick="showAddServerModal()" title="إضافة خادم">+</div>
+        </div>
+
+        <!-- الشريط الجانبي للقنوات -->
+        <div class="channels-sidebar">
+            <div class="server-header" onclick="toggleServerMenu()">
+                <span class="server-name" id="currentServerName">الخادم الرئيسي</span>
+                <span class="dropdown-icon">▼</span>
+            </div>
+            
+            <div class="channels-list">
+                <div class="channel-category">
+                    <span>📝 القنوات النصية</span>
+                    <span class="add-channel" onclick="showAddChannelModal('text')" title="إضافة قناة">+</span>
+                </div>
+                <div id="textChannels">
+                    <div class="channel-item active" data-channel="general" data-type="text">
+                        <span class="channel-icon">#</span>
+                        <span class="channel-name">عام</span>
+                    </div>
+                    <div class="channel-item" data-channel="random" data-type="text">
+                        <span class="channel-icon">#</span>
+                        <span class="channel-name">عشوائي</span>
+                    </div>
+                </div>
+
+                <div class="channel-category">
+                    <span>🔊 القنوات الصوتية</span>
+                    <span class="add-channel" onclick="showAddChannelModal('voice')" title="إضافة قناة صوتية">+</span>
+                </div>
+                <div id="voiceChannels">
+                    <div class="channel-item" data-channel="voice1" data-type="voice">
+                        <span class="channel-icon">🔊</span>
+                        <span class="channel-name">غرفة صوتية عامة</span>
+                    </div>
+                    <div class="channel-item" data-channel="voice2" data-type="voice">
+                        <span class="channel-icon">🔊</span>
+                        <span class="channel-name">غرفة ألعاب</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- منطقة الشات الرئيسية -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <span class="channel-hash">#</span>
+                    <span class="current-channel" id="currentChannelName">عام</span>
+                    <span class="channel-topic">مرحباً بك في القناة العامة</span>
+                </div>
+                <div class="chat-controls">
+                    <button class="chat-control" onclick="toggleMembers()" title="قائمة الأعضاء">👥</button>
+                    <button class="chat-control" onclick="searchMessages()" title="بحث">🔍</button>
+                    <button class="chat-control" onclick="showSettings()" title="الإعدادات">⚙️</button>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <!-- الرسائل ستظهر هنا -->
+            </div>
+
+            <div class="message-input-container">
+                <div class="message-input-wrapper">
+                    <input type="text" class="message-input" id="messageInput" placeholder="اكتب رسالة في #عام..." onkeypress="handleKeyPress(event)">
+                    <button class="send-button" onclick="sendMessage()">إرسال</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- قائمة الأعضاء -->
+        <div class="members-sidebar" id="membersSidebar">
+            <div class="member-category">متصل الآن — 3</div>
+            <div class="members-list">
+                <div class="member-item">
+                    <div class="member-avatar" style="position: relative;">
+                        A
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span class="member-name">أحمد</span>
+                </div>
+                <div class="member-item">
+                    <div class="member-avatar" style="position: relative;">
+                        م
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span class="member-name">محمد</span>
+                </div>
+                <div class="member-item">
+                    <div class="member-avatar" style="position: relative;">
+                        س
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span class="member-name">سارة</span>
+                </div>
+            </div>
+
+            <div class="member-category">غير متصل — 2</div>
+            <div class="members-list">
+                <div class="member-item">
+                    <div class="member-avatar">ع</div>
+                    <span class="member-name">علي</span>
+                </div>
+                <div class="member-item">
+                    <div class="member-avatar">ف</div>
+                    <span class="member-name">فاطمة</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <h1>مرحباً بك</h1>
-        <p>هذه صفحة ويب جميلة ومتجاوبة مع تأثيرات بصرية حديثة. تم تصميمها باستخدام CSS3 مع تدرجات لونية وتأثيرات الزجاج المطفي.</p>
-        <button class="button" onclick="showMessage()">اضغط هنا</button>
+    <!-- نافذة إضافة خادم -->
+    <div class="modal-overlay" id="addServerModal">
+        <div class="modal">
+            <div class="modal-header">إنشاء خادم جديد</div>
+            <div class="form-group">
+                <label class="form-label">اسم الخادم</label>
+                <input type="text" class="form-input" id="serverNameInput" placeholder="أدخل اسم الخادم">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="closeModal('addServerModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="createServer()">إنشاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة قناة -->
+    <div class="modal-overlay" id="addChannelModal">
+        <div class="modal">
+            <div class="modal-header">إنشاء قناة جديدة</div>
+            <div class="form-group">
+                <label class="form-label">اسم القناة</label>
+                <input type="text" class="form-input" id="channelNameInput" placeholder="أدخل اسم القناة">
+            </div>
+            <div class="form-group">
+                <label class="form-label">وصف القناة (اختياري)</label>
+                <input type="text" class="form-input" id="channelDescInput" placeholder="أدخل وصف القناة">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="closeModal('addChannelModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="createChannel()">إنشاء</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        function showMessage() {
-            alert('أهلاً وسهلاً! هذه رسالة ترحيبية 🌟');
+        // بيانات النظام
+        let currentServer = 'main';
+        let currentChannel = 'general';
+        let currentChannelType = 'text';
+        let channelType = 'text';
+        let membersVisible = false;
+
+        // بيانات الخوادم والقنوات
+        const servers = {
+            main: {
+                name: 'الخادم الرئيسي',
+                channels: {
+                    text: {
+                        general: { name: 'عام', messages: [] },
+                        random: { name: 'عشوائي', messages: [] }
+                    },
+                    voice: {
+                        voice1: { name: 'غرفة صوتية عامة' },
+                        voice2: { name: 'غرفة ألعاب' }
+                    }
+                }
+            },
+            gaming: {
+                name: 'خادم الألعاب',
+                channels: {
+                    text: {
+                        general: { name: 'عام', messages: [] },
+                        gaming: { name: 'الألعاب', messages: [] }
+                    },
+                    voice: {}
+                }
+            },
+            work: {
+                name: 'خادم العمل',
+                channels: {
+                    text: {
+                        general: { name: 'عام', messages: [] },
+                        projects: { name: 'المشاريع', messages: [] }
+                    },
+                    voice: {}
+                }
+            }
+        };
+
+        // رسائل تجريبية
+        servers.main.channels.text.general.messages = [
+            {
+                author: 'أحمد',
+                content: 'مرحباً بالجميع! 👋',
+                timestamp: new Date(Date.now() - 10000).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+                avatar: 'أ'
+            },
+            {
+                author: 'محمد',
+                content: 'أهلاً وسهلاً، كيف الحال؟',
+                timestamp: new Date(Date.now() - 5000).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+                avatar: 'م'
+            },
+            {
+                author: 'سارة',
+                content: 'الحمد لله، كل شيء بخير 😊',
+                timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+                avatar: 'س'
+            }
+        ];
+
+        // تحديث عرض الرسائل
+        function updateMessages() {
+            const container = document.getElementById('messagesContainer');
+            const messages = servers[currentServer].channels[currentChannelType][currentChannel].messages || [];
+            
+            container.innerHTML = '';
+            
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${message.avatar}</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">${message.author}</span>
+                            <span class="message-timestamp">اليوم في ${message.timestamp}</span>
+                        </div>
+                        <div class="message-text">${message.content}</div>
+                    </div>
+                `;
+                container.appendChild(messageDiv);
+            });
+            
+            container.scrollTop = container.scrollHeight;
         }
 
-        // إضافة تأثير تفاعلي للماوس
-        document.addEventListener('mousemove', function(e) {
-            const circles = document.querySelectorAll('.circle');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
+        // إرسال رسالة
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
             
-            circles.forEach((circle, index) => {
-                const speed = (index + 1) * 0.1;
-                const xOffset = (x - 0.5) * 50 * speed;
-                const yOffset = (y - 0.5) * 50 * speed;
-                
-                circle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            if (!content) return;
+            
+            const message = {
+                author: 'أنت',
+                content: content,
+                timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+                avatar: 'أ'
+            };
+            
+            if (!servers[currentServer].channels[currentChannelType][currentChannel].messages) {
+                servers[currentServer].channels[currentChannelType][currentChannel].messages = [];
+            }
+            
+            servers[currentServer].channels[currentChannelType][currentChannel].messages.push(message);
+            input.value = '';
+            updateMessages();
+        }
+
+        // التعامل مع الضغط على Enter
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // تبديل القنوات
+        function switchChannel(channelId, type) {
+            currentChannel = channelId;
+            currentChannelType = type;
+            
+            // تحديث القناة النشطة
+            document.querySelectorAll('.channel-item').forEach(item => {
+                item.classList.remove('active');
             });
-        });
-    </script>
-</body>
-</html>
+            
+            document.querySelector(`[data-channel="${channelId}"]`).classList.add('active');
+            
+            // تحديث عنوان القناة
+            const channelName = servers[currentServer].channels[type][channelId].name;
+            document.getElementById('currentChannelName').textContent = channelName;
+            
+            // تحديث placeholder
+            const input = document.getElementById('messageInput');
+            input.placeholder = `اكتب رسالة في #${channelName}...`;
+            
+            // تحديث الرسائل
+            updateMessages();
+        }
+
+        // تبديل الخوادم
+        function switchServer(serverId) {
+            currentServer = serverId;
+            
+            // تحديث الخادم النشط
+            document.querySelectorAll('.server-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-server="${serverId}"]`).classList.add('active');
+            
+            // تحديث اسم الخادم
+            document.getElementById('currentServerName').textContent = servers[serverId].name;
+            
+            // تحديث قائمة القنوات
+            updateChannelsList();
+            
+            // التبديل للقناة الأولى
+            const firstChannel = Object.keys(servers[serverId].channels.text)[0];
+            if (firstChannel) {
+                switchChannel(firstChannel, 'text');
+            }
+        }
+
+        // تحديث قائمة القنوات
+        function updateChannelsList() {
+            const textChannels = document.getElementById('textChannels');
+            const voiceChannels = document.getElementById('voiceChannels');
+            
+            textChannels.innerHTML = '';
+            voiceChannels.innerHTML = '';
+            
+            // القنوات النصية
+            Object.entries(servers[currentServer].channels.text).forEach(([id, channel]) => {
+                const channelDiv = document.createElement('div');
+                channelDiv.className = 'channel-item';
+                channelDiv.setAttribute('data-channel', id);
+                channelDiv.setAttribute('data-type', 'text');
+                channelDiv.innerHTML = `
+                    <span class="channel-icon">#</span>
+                    <span class="channel-name">${channel.name}</span>
+                `;
+                channelDiv.onclick = () => switchChannel(id, 'text');
+                textChannels.appendChild(channelDiv);
+            });
+            
+            // القنوات الصوتية
+            Object.entries(servers[currentServer].channels.voice).forEach(([id, channel]) => {
+                const channelDiv = document.createElement('div');
+                channelDiv.className = 'channel-item';
+                channelDiv.setAttribute('data-channel', id);
+                channelDiv.setAttribute('data-type', 'voice');
+                channelDiv.innerHTML = `
+                    <span class="channel-icon">🔊</span>
+                    <span class="channel-name">${channel.name}</span>
+                `;
+                channelDiv.onclick = () => switchChannel(id, 'voice');
+                voiceChannels.appendChild(channelDiv);
+            });
+        }
+
+        // عرض نافذة إضافة خادم
+        function showAddServerModal() {
+            document.getElementById('addServerModal').style.display = 'flex';
+        }
+
+        // عرض نافذة إضافة قناة
+        function showAddChannelModal(type) {
+            channelType = type;
+            document.getElementById('addChannelModal').style.display = 'flex';
+        }
+
+        // إغلاق النوافذ المنبثقة
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            
+            // مسح الحقول
+            if (modalId === 'addServerModal') {
+                document.getElementById('serverNameInput').value = '';
+            } else if (modalId === 'addChannelModal') {
+                document.getElementById('channelNameInput').value = '';
+                document.getElementById('channelDescInput').value = '';
+            }
+        }
+
+        // إنشاء خادم جديد
+        function createServer() {
+            const name = document.getElementById('serverNameInput').value.trim();
+            if (!name) return;
+            
+            const serverId = 'server_' + Date.now();
+            const serverLetter = name.charAt(0).toUpperCase();
+            
+            servers[serverId] = {
+                name: name,
+                channels: {
+                    text: {
+                        general: { name: 'عام', messages: [] }
+                    },
+                    voice: {}
+                }
+            };
+            
+            // إضافة أيقونة الخادم
+            const serverIcon = document.createElement('div');
+            serverIcon.className = 'server-icon';
+            serverIcon.setAttribute('data-server', serverId);
+            serverIcon.textContent = serverLetter;
+            serverIcon.onclick = () => switchServer(serverId);
+            
+            const addButton = document.querySelector('.add-server');
+            addButton.parentNode.insertBefore(serverIcon, addButton);
+            
+            closeModal('addServerModal');
+            
+            // رسالة تأكيد
+            alert(`ت
