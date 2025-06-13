@@ -1,11 +1,14 @@
-function askAI() {
-  const input = document.getElementById('userInput').value;
-  const responseDiv = document.getElementById('aiResponse');
+async function sendQuestion() {
+  const question = document.getElementById("question").value;
+  const resBox = document.getElementById("response");
+  resBox.innerText = "جاري التحليل...";
 
-  // استجابة وهمية
-  responseDiv.innerHTML = "🤖 جاري تحليل سؤالك...";
+  const response = await fetch("/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question })
+  });
 
-  setTimeout(() => {
-    responseDiv.innerHTML = `سؤالك: "${input}"<br>الإجابة: سيتم دعم هذا مستقبلاً بواسطة الذكاء الاصطناعي الحقيقي.`;
-  }, 1500);
+  const data = await response.json();
+  resBox.innerText = data.answer;
 }
