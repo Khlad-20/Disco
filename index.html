@@ -1,58 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مادة العلوم ثالث متوسط</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>العلوم - مساعد ذكي</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>📘 العلوم - ثالث متوسط ف3</h1>
-    <nav>
-      <a href="#ai">اسألني</a>
-      <a href="#quizzes">اختبارات</a>
-      <a href="#challenges">تحديات</a>
-      <a href="#help">مساعدات</a>
-    </nav>
-  </header>
-
-  <main>
-    <section id="ai">
-      <h2>🤖 اسألني - مساعد ذكي</h2>
-      <textarea id="userInput" placeholder="اكتب سؤالك في مادة العلوم..."></textarea>
-      <button onclick="askAI()">اسأل</button>
-      <div id="aiResponse"></div>
-    </section>
-
-    <section id="quizzes">
-      <h2>📝 اختبارات نهائية</h2>
-      <ul>
-        <li><a href="#">اختبار الوحدة الأولى - التفاعلات الكيميائية</a></li>
-        <li><a href="#">اختبار الوحدة الثانية - الحركة والقوة</a></li>
-        <li><a href="#">اختبار الطاقة</a></li>
-      </ul>
-    </section>
-
-    <section id="challenges">
-      <h2>🏆 تحديات</h2>
-      <p>شارك في تحدي يومي في موضوع العلوم، وحسّن من مستواك!</p>
-    </section>
-
-    <section id="help">
-      <h2>🧰 مساعدات دراسية</h2>
-      <ul>
-        <li><a href="#">ملخصات PDF</a></li>
-        <li><a href="#">شرح فيديو</a></li>
-        <li><a href="#">نماذج اختبارات</a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer>
-    <p>جميع الحقوق محفوظة © 2025</p>
-  </footer>
-
+  <h1>🤖 مساعد العلوم - ثالث متوسط ف3</h1>
+  <textarea id="question" placeholder="اكتب سؤالك هنا..."></textarea>
+  <button onclick="sendQuestion()">اسأل</button>
+  <div id="response"></div>
   <script src="script.js"></script>
 </body>
 </html>
