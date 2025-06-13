@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Clone - نظام الشات</title>
+    <title>اختبار العلوم - ثالث متوسط - الفصل الثالث</title>
     <style>
         * {
             margin: 0;
@@ -13,923 +13,715 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #36393f;
-            color: #dcddde;
-            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
-        .app {
-            display: flex;
-            height: 100vh;
-        }
-
-        /* الشريط الجانبي للخوادم */
-        .servers-sidebar {
-            width: 72px;
-            background: #202225;
-            padding: 12px 0;
-            overflow-y: auto;
-            border-left: 1px solid #1e2124;
-        }
-
-        .server-icon {
-            width: 48px;
-            height: 48px;
-            background: #5865f2;
-            border-radius: 50%;
-            margin: 8px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: bold;
-            font-size: 18px;
-            position: relative;
-        }
-
-        .server-icon:hover {
-            border-radius: 16px;
-            background: #5865f2;
-        }
-
-        .server-icon.active {
-            border-radius: 16px;
-        }
-
-        .server-icon.add-server {
-            background: #36393f;
-            color: #3ba55c;
-            font-size: 24px;
-        }
-
-        .server-icon.add-server:hover {
-            background: #3ba55c;
+        .header {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
             color: white;
+            padding: 30px;
+            text-align: center;
         }
 
-        /* الشريط الجانبي للقنوات */
-        .channels-sidebar {
-            width: 240px;
-            background: #2f3136;
-            display: flex;
-            flex-direction: column;
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .server-header {
-            height: 48px;
-            padding: 0 16px;
-            border-bottom: 1px solid #202225;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            background: #2f3136;
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
 
-        .server-header:hover {
-            background: #34373c;
+        .exam-info {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
         }
 
-        .server-name {
-            font-weight: 600;
-            font-size: 16px;
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            text-align: center;
         }
 
-        .dropdown-icon {
-            font-size: 12px;
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
         }
 
-        .channels-list {
-            flex: 1;
-            padding: 16px 8px;
-            overflow-y: auto;
-        }
-
-        .channel-category {
-            color: #8e9297;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin: 16px 8px 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .channel-category:hover {
-            color: #dcddde;
-        }
-
-        .channel-item {
-            padding: 1px 8px;
-            margin: 1px 0;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            height: 32px;
-            color: #8e9297;
-        }
-
-        .channel-item:hover {
-            background: #3c3f44;
-            color: #dcddde;
-        }
-
-        .channel-item.active {
-            background: #404249;
-            color: #ffffff;
-        }
-
-        .channel-icon {
-            margin-left: 6px;
-            font-size: 16px;
-        }
-
-        .channel-name {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .add-channel {
-            color: #b9bbbe;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .add-channel:hover {
-            color: #dcddde;
-        }
-
-        /* منطقة الشات الرئيسية */
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            height: 48px;
-            background: #36393f;
-            border-bottom: 1px solid #202225;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            position: relative;
-        }
-
-        .chat-header-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .channel-hash {
-            color: #8e9297;
-            margin-left: 8px;
-            font-size: 20px;
-        }
-
-        .current-channel {
-            font-weight: 600;
-            color: #ffffff;
-            margin-left: 8px;
-        }
-
-        .channel-topic {
-            color: #72767d;
-            font-size: 14px;
-            margin-right: 8px;
-        }
-
-        .chat-controls {
-            position: absolute;
-            left: 16px;
-            display: flex;
-            gap: 16px;
-        }
-
-        .chat-control {
-            background: none;
-            border: none;
-            color: #b9bbbe;
-            cursor: pointer;
-            font-size: 20px;
-            padding: 4px;
-        }
-
-        .chat-control:hover {
-            color: #dcddde;
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            background: #36393f;
-        }
-
-        .message {
-            display: flex;
-            margin-bottom: 16px;
-            padding: 2px 16px;
-            border-radius: 4px;
-        }
-
-        .message:hover {
-            background: #32353b;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #5865f2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            margin-left: 16px;
-            flex-shrink: 0;
-        }
-
-        .message-content {
-            flex: 1;
-        }
-
-        .message-header {
-            display: flex;
-            align-items: baseline;
-            margin-bottom: 4px;
-        }
-
-        .message-author {
-            font-weight: 600;
-            color: #ffffff;
-            margin-left: 8px;
-        }
-
-        .message-timestamp {
-            color: #72767d;
-            font-size: 12px;
-        }
-
-        .message-text {
-            line-height: 1.375;
-            color: #dcddde;
-        }
-
-        .message-input-container {
-            padding: 16px;
-            background: #36393f;
-        }
-
-        .message-input-wrapper {
-            background: #40444b;
-            border-radius: 8px;
-            padding: 11px 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .message-input {
-            flex: 1;
-            background: none;
-            border: none;
-            color: #dcddde;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .message-input::placeholder {
-            color: #72767d;
-        }
-
-        .send-button {
-            background: #5865f2;
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 8px;
-            font-weight: 600;
-        }
-
-        .send-button:hover {
-            background: #4752c4;
-        }
-
-        .send-button:disabled {
-            background: #4f545c;
-            cursor: not-allowed;
-        }
-
-        /* قوائم منبثقة */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal {
-            background: #36393f;
-            border-radius: 8px;
-            padding: 24px;
-            width: 400px;
-            max-width: 90vw;
-        }
-
-        .modal-header {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
+        .info-item strong {
+            color: #2c3e50;
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #b9bbbe;
-            font-size: 14px;
+            font-size: 1.1rem;
         }
 
-        .form-input {
-            width: 100%;
-            padding: 10px 12px;
-            background: #202225;
-            border: 1px solid #40444b;
-            border-radius: 4px;
-            color: #dcddde;
-            font-size: 16px;
+        .questions-container {
+            padding: 30px;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: #5865f2;
+        .question {
+            background: white;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            border-right: 5px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
         }
 
-        .button-group {
+        .question:hover {
+            transform: translateY(-2px);
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
             display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 24px;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-left: 10px;
+            scale: 1.2;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .buttons {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
         }
 
         .btn {
-            padding: 10px 16px;
+            padding: 15px 30px;
+            margin: 0 10px;
             border: none;
-            border-radius: 4px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn-primary {
-            background: #5865f2;
+            background: linear-gradient(45deg, #3498db, #2980b9);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #4752c4;
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: #dcddde;
-            border: 1px solid #40444b;
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
         }
 
         .btn-secondary:hover {
-            background: #40444b;
+            background: linear-gradient(45deg, #7f8c8d, #95a5a6);
+            transform: translateY(-2px);
         }
 
-        /* شريط التمرير المخصص */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #2f3136;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #202225;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #40444b;
-        }
-
-        /* المستخدمين المتصلين */
-        .members-sidebar {
-            width: 240px;
-            background: #2f3136;
-            border-right: 1px solid #202225;
-            padding: 16px 8px;
-            overflow-y: auto;
+        .result {
+            background: white;
+            margin: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
             display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .members-list {
-            margin-top: 16px;
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
         }
 
-        .member-category {
-            color: #8e9297;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            padding: 0 8px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .member-item {
-            display: flex;
-            align-items: center;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-bottom: 2px;
-        }
-
-        .member-item:hover {
-            background: #3c3f44;
-        }
-
-        .member-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #5865f2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .score {
+            font-size: 3rem;
             font-weight: bold;
-            color: white;
-            margin-left: 12px;
-            font-size: 14px;
+            margin: 20px 0;
         }
 
-        .member-name {
-            color: #b9bbbe;
-            font-size: 14px;
-        }
+        .score.excellent { color: #27ae60; }
+        .score.good { color: #f39c12; }
+        .score.needs-improvement { color: #e74c3c; }
 
-        .online-indicator {
-            width: 10px;
-            height: 10px;
-            background: #3ba55c;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -2px;
-            left: -2px;
-            border: 2px solid #2f3136;
+        .timer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
-            .servers-sidebar {
-                width: 60px;
+            .container {
+                margin: 10px;
+                border-radius: 10px;
             }
             
-            .channels-sidebar {
-                width: 200px;
+            .header h1 {
+                font-size: 2rem;
             }
             
-            .members-sidebar {
-                display: none !important;
+            .timer {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px 0;
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <!-- الشريط الجانبي للخوادم -->
-        <div class="servers-sidebar">
-            <div class="server-icon active" data-server="main">M</div>
-            <div class="server-icon" data-server="gaming">G</div>
-            <div class="server-icon" data-server="work">W</div>
-            <div class="server-icon add-server" onclick="showAddServerModal()" title="إضافة خادم">+</div>
+    <div class="timer" id="timer">الوقت: 45:00</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🧪 اختبار العلوم النهائي</h1>
+            <p>الصف الثالث المتوسط - الفصل الدراسي الثالث</p>
         </div>
 
-        <!-- الشريط الجانبي للقنوات -->
-        <div class="channels-sidebar">
-            <div class="server-header" onclick="toggleServerMenu()">
-                <span class="server-name" id="currentServerName">الخادم الرئيسي</span>
-                <span class="dropdown-icon">▼</span>
-            </div>
-            
-            <div class="channels-list">
-                <div class="channel-category">
-                    <span>📝 القنوات النصية</span>
-                    <span class="add-channel" onclick="showAddChannelModal('text')" title="إضافة قناة">+</span>
+        <div class="exam-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>عدد الأسئلة</strong>
+                    <span>20 سؤال</span>
                 </div>
-                <div id="textChannels">
-                    <div class="channel-item active" data-channel="general" data-type="text">
-                        <span class="channel-icon">#</span>
-                        <span class="channel-name">عام</span>
-                    </div>
-                    <div class="channel-item" data-channel="random" data-type="text">
-                        <span class="channel-icon">#</span>
-                        <span class="channel-name">عشوائي</span>
-                    </div>
+                <div class="info-item">
+                    <strong>الوقت المحدد</strong>
+                    <span>45 دقيقة</span>
                 </div>
-
-                <div class="channel-category">
-                    <span>🔊 القنوات الصوتية</span>
-                    <span class="add-channel" onclick="showAddChannelModal('voice')" title="إضافة قناة صوتية">+</span>
+                <div class="info-item">
+                    <strong>الدرجة الكاملة</strong>
+                    <span>100 درجة</span>
                 </div>
-                <div id="voiceChannels">
-                    <div class="channel-item" data-channel="voice1" data-type="voice">
-                        <span class="channel-icon">🔊</span>
-                        <span class="channel-name">غرفة صوتية عامة</span>
-                    </div>
-                    <div class="channel-item" data-channel="voice2" data-type="voice">
-                        <span class="channel-icon">🔊</span>
-                        <span class="channel-name">غرفة ألعاب</span>
-                    </div>
+                <div class="info-item">
+                    <strong>درجة النجاح</strong>
+                    <span>60 درجة</span>
                 </div>
             </div>
         </div>
 
-        <!-- منطقة الشات الرئيسية -->
-        <div class="chat-area">
-            <div class="chat-header">
-                <div class="chat-header-info">
-                    <span class="channel-hash">#</span>
-                    <span class="current-channel" id="currentChannelName">عام</span>
-                    <span class="channel-topic">مرحباً بك في القناة العامة</span>
-                </div>
-                <div class="chat-controls">
-                    <button class="chat-control" onclick="toggleMembers()" title="قائمة الأعضاء">👥</button>
-                    <button class="chat-control" onclick="searchMessages()" title="بحث">🔍</button>
-                    <button class="chat-control" onclick="showSettings()" title="الإعدادات">⚙️</button>
+        <div class="questions-container" id="questionsContainer">
+            <!-- الأسئلة -->
+            <div class="question">
+                <h3>1. ما هو الرقم الهيدروجيني للمحلول المتعادل؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="a"> أ) 0
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="b"> ب) 7
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="c"> ج) 14
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="d"> د) 1
+                    </label>
                 </div>
             </div>
 
-            <div class="messages-container" id="messagesContainer">
-                <!-- الرسائل ستظهر هنا -->
+            <div class="question">
+                <h3>2. أي من العناصر التالية يعتبر من اللافلزات؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="a"> أ) الحديد
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="b"> ب) الكلور
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="c"> ج) الألمنيوم
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="d"> د) النحاس
+                    </label>
+                </div>
             </div>
 
-            <div class="message-input-container">
-                <div class="message-input-wrapper">
-                    <input type="text" class="message-input" id="messageInput" placeholder="اكتب رسالة في #عام..." onkeypress="handleKeyPress(event)">
-                    <button class="send-button" onclick="sendMessage()">إرسال</button>
+            <div class="question">
+                <h3>3. ما وحدة قياس القوة في النظام الدولي؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="a"> أ) الجول
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="b"> ب) النيوتن
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="c"> ج) الواط
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="d"> د) الكيلوجرام
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>4. أي من الغازات التالية يسبب الاحتباس الحراري؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q4" value="a"> أ) الأكسجين
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="b"> ب) النيتروجين
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="c"> ج) ثاني أكسيد الكربون
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="d"> د) الهيليوم
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>5. ما نوع التفاعل الذي يحدث عند خلط حمض وقاعدة؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q5" value="a"> أ) تفاعل تأكسد
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="b"> ب) تفاعل تعادل
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="c"> ج) تفاعل تحلل
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q5" value="d"> د) تفاعل اتحاد
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>6. أي من الأجهزة التالية يستخدم لقياس الضغط الجوي؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q6" value="a"> أ) الترمومتر
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="b"> ب) البارومتر
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="c"> ج) الأميتر
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q6" value="d"> د) الفولتميتر
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>7. ما هي السرعة التي ينتشر بها الضوء في الفراغ؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q7" value="a"> أ) 300,000 كم/ث
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="b"> ب) 300,000,000 م/ث
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="c"> ج) 3,000 كم/ث
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q7" value="d"> د) 30,000 م/ث
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>8. أي من العوامل التالية يؤثر على سرعة التفاعل الكيميائي؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q8" value="a"> أ) درجة الحرارة
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="b"> ب) التركيز
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="c"> ج) الحفاز
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q8" value="d"> د) جميع ما سبق
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>9. ما هو رمز عنصر الذهب في الجدول الدوري؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q9" value="a"> أ) Go
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="b"> ب) Au
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="c"> ج) Ag
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q9" value="d"> د) Gd
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>10. أي من المواد التالية موصل جيد للكهرباء؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q10" value="a"> أ) البلاستيك
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="b"> ب) الخشب
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="c"> ج) النحاس
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q10" value="d"> د) الزجاج
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>11. ما هي الكتلة الذرية للكربون؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q11" value="a"> أ) 6
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="b"> ب) 12
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="c"> ج) 14
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q11" value="d"> د) 16
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>12. أي من أنواع الروابط التالية أقوى؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q12" value="a"> أ) رابطة هيدروجينية
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="b"> ب) رابطة تساهمية
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="c"> ج) رابطة أيونية
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q12" value="d"> د) قوى فان دير فالس
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>13. ما هو الغاز الذي يتكون 78% من الغلاف الجوي؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q13" value="a"> أ) الأكسجين
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="b"> ب) النيتروجين
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="c"> ج) ثاني أكسيد الكربون
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q13" value="d"> د) الأرجون
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>14. أي من الصيغ التالية تمثل حمض الكبريتيك؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q14" value="a"> أ) HCl
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="b"> ب) H2SO4
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="c"> ج) HNO3
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q14" value="d"> د) H3PO4
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>15. ما هو قانون نيوتن الأول؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q15" value="a"> أ) القوة = الكتلة × التسارع
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="b"> ب) لكل فعل رد فعل مساو له ومضاد له في الاتجاه
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="c"> ج) الجسم يبقى في حالة السكون أو الحركة المنتظمة
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q15" value="d"> د) الطاقة = الكتلة × مربع السرعة
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>16. أي من المعادن التالية يصدأ بسهولة؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q16" value="a"> أ) الذهب
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q16" value="b"> ب) الحديد
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q16" value="c"> ج) الفضة
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q16" value="d"> د) البلاتين
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>17. ما هي وحدة قياس التردد؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q17" value="a"> أ) الهرتز
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q17" value="b"> ب) الديسيبل
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q17" value="c"> ج) الأمبير
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q17" value="d"> د) الأوم
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>18. أي من العبارات التالية صحيحة حول الموجات الصوتية؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q18" value="a"> أ) تنتشر في الفراغ
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q18" value="b"> ب) هي موجات كهرومغناطيسية
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q18" value="c"> ج) تحتاج إلى وسط للانتشار
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q18" value="d"> د) سرعتها ثابتة في جميع الأوساط
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>19. ما هو المركب الكيميائي لملح الطعام؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q19" value="a"> أ) KCl
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q19" value="b"> ب) NaCl
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q19" value="c"> ج) CaCl2
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q19" value="d"> د) MgCl2
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>20. أي من العوامل التالية يزيد من معدل التبخر؟</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q20" value="a"> أ) زيادة درجة الحرارة
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q20" value="b"> ب) زيادة الرطوبة
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q20" value="c"> ج) زيادة الضغط
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q20" value="d"> د) تقليل مساحة السطح
+                    </label>
                 </div>
             </div>
         </div>
 
-        <!-- قائمة الأعضاء -->
-        <div class="members-sidebar" id="membersSidebar">
-            <div class="member-category">متصل الآن — 3</div>
-            <div class="members-list">
-                <div class="member-item">
-                    <div class="member-avatar" style="position: relative;">
-                        A
-                        <div class="online-indicator"></div>
-                    </div>
-                    <span class="member-name">أحمد</span>
-                </div>
-                <div class="member-item">
-                    <div class="member-avatar" style="position: relative;">
-                        م
-                        <div class="online-indicator"></div>
-                    </div>
-                    <span class="member-name">محمد</span>
-                </div>
-                <div class="member-item">
-                    <div class="member-avatar" style="position: relative;">
-                        س
-                        <div class="online-indicator"></div>
-                    </div>
-                    <span class="member-name">سارة</span>
-                </div>
-            </div>
-
-            <div class="member-category">غير متصل — 2</div>
-            <div class="members-list">
-                <div class="member-item">
-                    <div class="member-avatar">ع</div>
-                    <span class="member-name">علي</span>
-                </div>
-                <div class="member-item">
-                    <div class="member-avatar">ف</div>
-                    <span class="member-name">فاطمة</span>
-                </div>
-            </div>
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="checkAnswers()">تحقق من الإجابات</button>
+            <button class="btn btn-secondary" onclick="resetExam()">إعادة تعيين</button>
         </div>
-    </div>
 
-    <!-- نافذة إضافة خادم -->
-    <div class="modal-overlay" id="addServerModal">
-        <div class="modal">
-            <div class="modal-header">إنشاء خادم جديد</div>
-            <div class="form-group">
-                <label class="form-label">اسم الخادم</label>
-                <input type="text" class="form-input" id="serverNameInput" placeholder="أدخل اسم الخادم">
-            </div>
-            <div class="button-group">
-                <button class="btn btn-secondary" onclick="closeModal('addServerModal')">إلغاء</button>
-                <button class="btn btn-primary" onclick="createServer()">إنشاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة إضافة قناة -->
-    <div class="modal-overlay" id="addChannelModal">
-        <div class="modal">
-            <div class="modal-header">إنشاء قناة جديدة</div>
-            <div class="form-group">
-                <label class="form-label">اسم القناة</label>
-                <input type="text" class="form-input" id="channelNameInput" placeholder="أدخل اسم القناة">
-            </div>
-            <div class="form-group">
-                <label class="form-label">وصف القناة (اختياري)</label>
-                <input type="text" class="form-input" id="channelDescInput" placeholder="أدخل وصف القناة">
-            </div>
-            <div class="button-group">
-                <button class="btn btn-secondary" onclick="closeModal('addChannelModal')">إلغاء</button>
-                <button class="btn btn-primary" onclick="createChannel()">إنشاء</button>
-            </div>
+        <div class="result" id="result">
+            <h2>نتيجة الاختبار</h2>
+            <div class="score" id="score">0/20</div>
+            <p id="message"></p>
+            <p id="percentage"></p>
         </div>
     </div>
 
     <script>
-        // بيانات النظام
-        let currentServer = 'main';
-        let currentChannel = 'general';
-        let currentChannelType = 'text';
-        let channelType = 'text';
-        let membersVisible = false;
-
-        // بيانات الخوادم والقنوات
-        const servers = {
-            main: {
-                name: 'الخادم الرئيسي',
-                channels: {
-                    text: {
-                        general: { name: 'عام', messages: [] },
-                        random: { name: 'عشوائي', messages: [] }
-                    },
-                    voice: {
-                        voice1: { name: 'غرفة صوتية عامة' },
-                        voice2: { name: 'غرفة ألعاب' }
-                    }
-                }
-            },
-            gaming: {
-                name: 'خادم الألعاب',
-                channels: {
-                    text: {
-                        general: { name: 'عام', messages: [] },
-                        gaming: { name: 'الألعاب', messages: [] }
-                    },
-                    voice: {}
-                }
-            },
-            work: {
-                name: 'خادم العمل',
-                channels: {
-                    text: {
-                        general: { name: 'عام', messages: [] },
-                        projects: { name: 'المشاريع', messages: [] }
-                    },
-                    voice: {}
-                }
-            }
+        // الإجابات الصحيحة
+        const correctAnswers = {
+            q1: 'b', q2: 'b', q3: 'b', q4: 'c', q5: 'b',
+            q6: 'b', q7: 'b', q8: 'd', q9: 'b', q10: 'c',
+            q11: 'b', q12: 'b', q13: 'b', q14: 'b', q15: 'c',
+            q16: 'b', q17: 'a', q18: 'c', q19: 'b', q20: 'a'
         };
 
-        // رسائل تجريبية
-        servers.main.channels.text.general.messages = [
-            {
-                author: 'أحمد',
-                content: 'مرحباً بالجميع! 👋',
-                timestamp: new Date(Date.now() - 10000).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
-                avatar: 'أ'
-            },
-            {
-                author: 'محمد',
-                content: 'أهلاً وسهلاً، كيف الحال؟',
-                timestamp: new Date(Date.now() - 5000).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
-                avatar: 'م'
-            },
-            {
-                author: 'سارة',
-                content: 'الحمد لله، كل شيء بخير 😊',
-                timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
-                avatar: 'س'
-            }
-        ];
+        // المؤقت
+        let timeLeft = 45 * 60; // 45 دقيقة بالثواني
+        let timerInterval;
 
-        // تحديث عرض الرسائل
-        function updateMessages() {
-            const container = document.getElementById('messagesContainer');
-            const messages = servers[currentServer].channels[currentChannelType][currentChannel].messages || [];
-            
-            container.innerHTML = '';
-            
-            messages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">${message.avatar}</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">${message.author}</span>
-                            <span class="message-timestamp">اليوم في ${message.timestamp}</span>
-                        </div>
-                        <div class="message-text">${message.content}</div>
-                    </div>
-                `;
-                container.appendChild(messageDiv);
-            });
-            
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // إرسال رسالة
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const content = input.value.trim();
-            
-            if (!content) return;
-            
-            const message = {
-                author: 'أنت',
-                content: content,
-                timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
-                avatar: 'أ'
-            };
-            
-            if (!servers[currentServer].channels[currentChannelType][currentChannel].messages) {
-                servers[currentServer].channels[currentChannelType][currentChannel].messages = [];
-            }
-            
-            servers[currentServer].channels[currentChannelType][currentChannel].messages.push(message);
-            input.value = '';
-            updateMessages();
-        }
-
-        // التعامل مع الضغط على Enter
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        // تبديل القنوات
-        function switchChannel(channelId, type) {
-            currentChannel = channelId;
-            currentChannelType = type;
-            
-            // تحديث القناة النشطة
-            document.querySelectorAll('.channel-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            document.querySelector(`[data-channel="${channelId}"]`).classList.add('active');
-            
-            // تحديث عنوان القناة
-            const channelName = servers[currentServer].channels[type][channelId].name;
-            document.getElementById('currentChannelName').textContent = channelName;
-            
-            // تحديث placeholder
-            const input = document.getElementById('messageInput');
-            input.placeholder = `اكتب رسالة في #${channelName}...`;
-            
-            // تحديث الرسائل
-            updateMessages();
-        }
-
-        // تبديل الخوادم
-        function switchServer(serverId) {
-            currentServer = serverId;
-            
-            // تحديث الخادم النشط
-            document.querySelectorAll('.server-icon').forEach(icon => {
-                icon.classList.remove('active');
-            });
-            
-            document.querySelector(`[data-server="${serverId}"]`).classList.add('active');
-            
-            // تحديث اسم الخادم
-            document.getElementById('currentServerName').textContent = servers[serverId].name;
-            
-            // تحديث قائمة القنوات
-            updateChannelsList();
-            
-            // التبديل للقناة الأولى
-            const firstChannel = Object.keys(servers[serverId].channels.text)[0];
-            if (firstChannel) {
-                switchChannel(firstChannel, 'text');
-            }
-        }
-
-        // تحديث قائمة القنوات
-        function updateChannelsList() {
-            const textChannels = document.getElementById('textChannels');
-            const voiceChannels = document.getElementById('voiceChannels');
-            
-            textChannels.innerHTML = '';
-            voiceChannels.innerHTML = '';
-            
-            // القنوات النصية
-            Object.entries(servers[currentServer].channels.text).forEach(([id, channel]) => {
-                const channelDiv = document.createElement('div');
-                channelDiv.className = 'channel-item';
-                channelDiv.setAttribute('data-channel', id);
-                channelDiv.setAttribute('data-type', 'text');
-                channelDiv.innerHTML = `
-                    <span class="channel-icon">#</span>
-                    <span class="channel-name">${channel.name}</span>
-                `;
-                channelDiv.onclick = () => switchChannel(id, 'text');
-                textChannels.appendChild(channelDiv);
-            });
-            
-            // القنوات الصوتية
-            Object.entries(servers[currentServer].channels.voice).forEach(([id, channel]) => {
-                const channelDiv = document.createElement('div');
-                channelDiv.className = 'channel-item';
-                channelDiv.setAttribute('data-channel', id);
-                channelDiv.setAttribute('data-type', 'voice');
-                channelDiv.innerHTML = `
-                    <span class="channel-icon">🔊</span>
-                    <span class="channel-name">${channel.name}</span>
-                `;
-                channelDiv.onclick = () => switchChannel(id, 'voice');
-                voiceChannels.appendChild(channelDiv);
-            });
-        }
-
-        // عرض نافذة إضافة خادم
-        function showAddServerModal() {
-            document.getElementById('addServerModal').style.display = 'flex';
-        }
-
-        // عرض نافذة إضافة قناة
-        function showAddChannelModal(type) {
-            channelType = type;
-            document.getElementById('addChannelModal').style.display = 'flex';
-        }
-
-        // إغلاق النوافذ المنبثقة
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            
-            // مسح الحقول
-            if (modalId === 'addServerModal') {
-                document.getElementById('serverNameInput').value = '';
-            } else if (modalId === 'addChannelModal') {
-                document.getElementById('channelNameInput').value = '';
-                document.getElementById('channelDescInput').value = '';
-            }
-        }
-
-        // إنشاء خادم جديد
-        function createServer() {
-            const name = document.getElementById('serverNameInput').value.trim();
-            if (!name) return;
-            
-            const serverId = 'server_' + Date.now();
-            const serverLetter = name.charAt(0).toUpperCase();
-            
-            servers[serverId] = {
-                name: name,
-                channels: {
-                    text: {
-                        general: { name: 'عام', messages: [] }
-                    },
-                    voice: {}
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                document.getElementById('timer').textContent = 
+                    `الوقت: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswers();
+                    alert('انتهى الوقت! تم تسليم الاختبار تلقائياً.');
                 }
-            };
+                
+                timeLeft--;
+            }, 1000);
+        }
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
             
-            // إضافة أيقونة الخادم
-            const serverIcon = document.createElement('div');
-            serverIcon.className = 'server-icon';
-            serverIcon.setAttribute('data-server', serverId);
-            serverIcon.textContent = serverLetter;
-            serverIcon.onclick = () => switchServer(serverId);
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+
+            // تحقق من كل سؤال
+            for (let question in correctAnswers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                const options = document.querySelectorAll(`input[name="${question}"]`);
+                
+                options.forEach(option => {
+                    const label = option.parentElement;
+                    
+                    if (option.value === correctAnswers[question]) {
+                        label.classList.add('correct');
+                    } else if (selectedAnswer && option === selectedAnswer) {
+                        label.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                    score++;
+                }
+            }
+
+            // عرض النتيجة
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const scoreElement = document.getElementById('score');
+            const messageElement = document.getElementById('message');
+            const percentageElement = document.getElementById('percentage');
             
-            const addButton = document.querySelector('.add-server');
-            addButton.parentNode.insertBefore(serverIcon, addButton);
+            scoreElement.textContent = `${score}/${totalQuestions}`;
+            percentageElement.textContent = `النسبة المئوية: ${percentage}%`;
             
-            closeModal('addServerModal');
-            
-            // رسالة تأكيد
-            alert(`ت
+            if (percentage >= 90) {
+                scoreElement.className = 'score excellent';
+                messageElement.textContent = '🎉 ممتاز! أداء رائع جداً!';
+            } else if (percentage >= 75) {
+                scoreElement.className = 'score good';
+                messageElement.textContent = '👍 جيد جداً! استمر في التحسن
