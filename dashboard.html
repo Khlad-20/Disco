@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة المستخدم</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="profile" id="profile">
+    <p>جاري تحميل معلوماتك...</p>
+  </div>
+
+  <script>
+    fetch('/user')
+      .then(res => res.json())
+      .then(user => {
+        if (user.error) return location.href = '/';
+        document.getElementById('profile').innerHTML = `
+          <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" alt="Avatar" class="avatar">
+          <h2>${user.username}#${user.discriminator}</h2>
+          <p>ID: ${user.id}</p>
+        `;
+      });
+  </script>
+</body>
+</html>
