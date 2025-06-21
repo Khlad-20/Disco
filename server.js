@@ -29,7 +29,7 @@ app.use(passport.session());
 
 app.use(express.static("public"));
 
-app.get("/auth/discord", passport.authenticate("discord"));
+app.get("/auth/discord", passport.authenticate("https://discord.com/oauth2/authorize?client_id=1261839375738732684&response_type=code&redirect_uri=https%3A%2F%2Fkhaledali.vercel.app%2F&scope=identify+email+guilds"));
 app.get("/auth/discord/callback", passport.authenticate("discord", {
     failureRedirect: "/"
 }), (req, res) => res.redirect("/dashboard"));
