@@ -1,38 +1,47 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { Configuration, OpenAIApi } = require('openai');
+// server.js
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
+const DiscordStrategy = require("passport-discord").Strategy;
+const path = require("path");
 
-dotenv.config();
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
 
-const openai = new OpenAIApi(new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
+
+passport.use(new DiscordStrategy({
+    clientID: '1261839375738732684',
+    clientSecret: 'prjbVJQ-jgyDmPsPmXBKDTlYHDbX4DCB',
+    callbackURL: 'https://khaledali.vercel.app/',
+    scope: ['identify', 'guilds', 'email']
+}, (accessToken, refreshToken, profile, done) => {
+    process.nextTick(() => done(null, profile));
 }));
 
-app.post('/ask', async (req, res) => {
-  const question = req.body.question;
+app.use(session({
+    secret: '28a20a51f18cd33bf0e075e0bce294f2b4143e7bbd9436bcb017eb13a901f5cc',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-  try {
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: 'أنت مساعد ذكي لمادة العلوم للصف الثالث متوسط ف3.' },
-        { role: 'user', content: question }
-      ]
-    });
+app.use(express.static("public"));
 
-    const answer = completion.data.choices[0].message.content;
-    res.json({ answer });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "حدث خطأ في الذكاء الاصطناعي." });
-  }
+app.get("/auth/discord", passport.authenticate("discord"));
+app.get("/auth/discord/callback", passport.authenticate("discord", {
+    failureRedirect: "/"
+}), (req, res) => res.redirect("/dashboard"));
+
+app.get("/dashboard", (req, res) => {
+    if (!req.isAuthenticated()) return res.redirect("/");
+    res.sendFile(path.join(__dirname, "public/dashboard.html"));
 });
 
-app.listen(3000, () => {
-  console.log('✅ الخادم يعمل على http://localhost:3000');
+app.get("/user", (req, res) => {
+    if (!req.isAuthenticated()) return res.json({ error: "Not logged in" });
+    res.json(req.user);
 });
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
